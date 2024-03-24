@@ -7,41 +7,39 @@ import ru.skypro.employeewebapp.exception.EmployeeStoragelsFullException;
 import ru.skypro.employeewebapp.model.Employee;
 import ru.skypro.employeewebapp.service.EmployeeService;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 private static final int EMPLOYEE_STORAGE_SIZE = 5;
-private List<Employee> employees = new ArrayList<>();
+private final Map <String,Employee> employees = new HashMap<>();
     @Override
     public Employee add(String firstName, String lastName) {
         if (employees.size()==EMPLOYEE_STORAGE_SIZE) {
             throw new EmployeeStoragelsFullException();
         }
         Employee employee = new Employee(firstName, lastName);
-        if (employees.contains(employee)){
+        if (employees.containsKey(employee.getFullName())){
             throw new EmployeeAlreadyAddedException();
         }
-        employees.add(employee);
+        employees.put(employee.getFullName(),employee);
         return employee;
     }
 
     @Override
     public Employee remove(String firstName, String lastName) {
         Employee employee = new Employee(firstName, lastName);
-        if (!employees.contains(employee)){
+        if (!employees.containsKey(employee.getFullName())){
             throw new EmployeeNotFoundException();
         }
-        employees.remove(employee);
+        employees.remove(employee.getFullName());
         return employee;
     }
 
     @Override
     public Employee find(String firstName, String lastName) {
         Employee employee = new Employee(firstName, lastName);
-        if (!employees.contains(employee)){
+        if (!employees.containsKey(employee.getFullName())){
             throw new EmployeeNotFoundException();
         }
         return employee;
@@ -49,6 +47,6 @@ private List<Employee> employees = new ArrayList<>();
 
     @Override
     public Collection<Employee> findAll() {
-        return employees;
+        return employees.values();
     }
 }
