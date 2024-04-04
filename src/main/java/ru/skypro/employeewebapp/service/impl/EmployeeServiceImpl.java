@@ -13,17 +13,17 @@ import java.util.*;
 public class EmployeeServiceImpl implements EmployeeService {
 private static final int EMPLOYEE_STORAGE_SIZE = 5;
 private final Map <String,Employee> employees = new HashMap<>();
+
+    @Override
+    public Employee add(String firstName, String lastName, int salary, int departmentId) {
+        Employee employee = new Employee(firstName,lastName,salary,departmentId);
+        return add(employee);
+    }
+
     @Override
     public Employee add(String firstName, String lastName) {
-        if (employees.size()==EMPLOYEE_STORAGE_SIZE) {
-            throw new EmployeeStoragelsFullException();
-        }
         Employee employee = new Employee(firstName, lastName);
-        if (employees.containsKey(employee.getFullName())){
-            throw new EmployeeAlreadyAddedException();
-        }
-        employees.put(employee.getFullName(),employee);
-        return employee;
+        return add(employee);
     }
 
     @Override
@@ -49,4 +49,17 @@ private final Map <String,Employee> employees = new HashMap<>();
     public Collection<Employee> findAll() {
         return employees.values();
     }
+    private Employee add (Employee employee) {
+        if (employees.size()==EMPLOYEE_STORAGE_SIZE) {
+            throw new EmployeeStoragelsFullException();
+        }
+
+        if (employees.containsKey(employee.getFullName())){
+            throw new EmployeeAlreadyAddedException();
+        }
+        employees.put(employee.getFullName(),employee);
+        return employee;
+    }
+
+
 }
