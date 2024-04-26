@@ -25,8 +25,8 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public Employee findEmployeeWithMaxSalary(int departmentId) {
-       return    employeeService.findAll().stream()
-                .filter(e->e.getDepartmentId()==departmentId)
+        return employeeService.findAll().stream()
+                .filter(e -> e.getDepartmentId() == departmentId)
                 .max(Comparator.comparingInt(Employee::getSalary))
                 .orElseThrow(EmployeeNotFoundException::new);
 
@@ -34,8 +34,8 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public Employee findEmployeeWithMinSalary(int departmentId) {
-        return   employeeService.findAll().stream()
-                .filter(e->e.getDepartmentId()==departmentId)
+        return employeeService.findAll().stream()
+                .filter(e -> e.getDepartmentId() == departmentId)
                 .min(Comparator.comparingInt(Employee::getSalary))
                 .orElseThrow(EmployeeNotFoundException::new);
 
@@ -43,15 +43,15 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public Collection<Employee> findEmployeesByDepartment(int departmentId) {
-        return   employeeService.findAll().stream()
-                .filter(e->e.getDepartmentId()==departmentId)
+        return employeeService.findAll().stream()
+                .filter(e -> e.getDepartmentId() == departmentId)
                 .sorted(comparing(Employee::getFullName))
                 .collect(Collectors.toList());
     }
 
     @Override
     public Map<Integer, List<Employee>> findEmployeesByDepartment() {
-        return   employeeService.findAll().stream()
+        return employeeService.findAll().stream()
                 .collect(Collectors.groupingBy(Employee::getDepartmentId));
     }
 }
